@@ -7,9 +7,9 @@ import transporter from "../utils/transporter";
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
-    if (!username || !email || !password) {
+    if (!firstName || !lastName || !email || !password) {
       return res
         .status(400)
         .json({ status: "error", message: "All fields are required" });
@@ -54,7 +54,7 @@ export const signup = async (req: Request, res: Response) => {
     }
 
     // 🔒 Hash password and insert new user
-    const user = await signupUser(username, email, password);
+    const user = await signupUser(firstName, lastName, email, password);
     return res.status(201).json({
       status: "success",
       message: "Signup successful! Please check your email to verify your account.",
