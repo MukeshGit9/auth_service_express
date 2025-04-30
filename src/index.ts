@@ -17,7 +17,7 @@ const server = http.createServer(app);
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3000 ;
+const PORT = process.env.PORT ;
 const BASE_URL_SERVER = process.env.BASE_URL_SERVER ;
 
 // default route------------------------------------------------------------------DEFAULT ROUTE "/"
