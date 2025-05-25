@@ -6,17 +6,17 @@ import {
 
 export const forgotPassword = async (req: Request, res: Response) => {
   try {
-    const { email } = req.body;
-    await handleForgotPassword(email);
+    const { email, useRecoveryEmail } = req.body;
+    await handleForgotPassword(email, useRecoveryEmail);
     res
       .status(201)
       .json({
         status: "success",
-        message: "Password reset link sent to your email",
+        message: `Reset password link sent to ${useRecoveryEmail ? 'recovery' : 'primary'} email`,
       });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ status: "error", message: "Email is required" });
+    res.status(401).json({ status: "error", message: "Email is required" });
   }
 };
 

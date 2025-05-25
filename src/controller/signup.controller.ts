@@ -5,11 +5,11 @@ import crypto from "crypto";
 import pool from "../config/pgDatabase/dbConnect";
 import transporter from "../utils/transporter";
 
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response): Promise<Response> => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
-    if (!firstName || !lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !password ) { 
       return res
         .status(400)
         .json({ status: "error", message: "All fields are required" });
@@ -24,7 +24,7 @@ export const signup = async (req: Request, res: Response) => {
 
       if (existingUser.is_verified) {
         return res
-          .status(400)
+          .status(401)
           .json({ status: "error", message: "User already exists and is verified!" });
       } else {
         // 🟡 Resend verification token
@@ -79,7 +79,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
   if (rows.length === 0) {
     return res
-      .status(400)
+      .status(401)
       .send({ status: "error", message: "Invalid or expired token" });
   }
 

@@ -4,10 +4,12 @@ import pool from "../config/pgDatabase/dbConnect";
 import transporter from "../utils/transporter";
 
 // handel forgot password
-export const handleForgotPassword = async (email: string) => {
-  const userResult = await pool.query(`SELECT * FROM users WHERE email = $1`, [
-    email,
-  ]);
+export const handleForgotPassword = async (email: string, useRecoveryEmail:false) => {
+  const userQuery = useRecoveryEmail
+    ? `SELECT * FROM users WHERE recovery_email = $1`
+    : `SELECT * FROM users WHERE email = $1`;
+
+  const userResult = await pool.query(userQuery, [email]);
   const user = userResult.rows[0];
 
   if (!user) throw new Error("User not found");
@@ -24,7 +26,7 @@ export const handleForgotPassword = async (email: string) => {
   const resetLink = `${process.env.BASE_URL_SERVER}/api/v1/auth/reset-password?resetPasswordToken=${token}`;
   await transporter.sendMail({
     from: `"Auth Service" <${process.env.SMTP_EMAIL}>`,
-    to: email,
+    to: useRecoveryEmail ? user.recovery_email : user.email,
     subject: "Reset your password",
     html: `<p>Click <a href="${resetLink}">here</a> to reset your password. Link expires in 15 minutes.</p>`,
   });

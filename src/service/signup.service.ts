@@ -8,7 +8,8 @@ export const signupUser = async (
   firstName: string,
   lastName: string,
   email: string,
-  password: string
+  password: string,
+  
 ) => {
   // unique username
   // const randonSuffix = crypto.randomBytes(32).toString("hex");
